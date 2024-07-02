@@ -99,4 +99,15 @@ Adding a player character to the scene for testing
     * (Do this for testing until you update the GameMode with a Default Pawn class and a PlayerStart in the level)
 
 ====================================
+29. The Game Mode
 
+* Using GameModeBase as the parent class for GunSurvivorsGameMode: BP_GunSurvivorsGameMode
+* Set BP_Player as the default player pawn class:
+  * Open gamemode -> Class Defaults -> Classes -> Default Pawn Class:  Set to BP_Player
+* Set BP_GunSurvivorsGameMode as the default Game Mode:
+  * Edit -> Project Settings -> Project -> Maps & Modes-> Default Modes -> Default GameMode:  Set to BP_GunSurvivorsGameMode
+
+
+
+
+====================================
