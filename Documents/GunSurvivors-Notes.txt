@@ -25,6 +25,10 @@ Camera:
 * Hide in-scene camera (prevent from blocking your view when editing the level)
   * Set Scale to 0.01
 
+====================================
+27. Flipbooks 101
+
+In order to use Flipbook in the game, you must use a Flipbook component. Flipbook Components do not accept Sprites, so even if you have a single frame animation, you still need to make a Flipbook from the single Sprite.
 
 ====================================
 
