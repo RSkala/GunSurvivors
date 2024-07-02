@@ -68,7 +68,25 @@ void ATopDownCharacter::Tick(float DeltaTime)
 			FVector CurrentLocation = GetActorLocation();
 
 			// The player moves in the XZ plane
-			FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, 0.0f, DistanceToMove.Y);
+			//FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, 0.0f, DistanceToMove.Y);
+
+			// Move the player in the X (left/right) direction
+			FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, 0.0f, 0.0f);
+
+			// Check if the new location is outside of the horizontal map bounds
+			if (!IsInMapBoundsHorizontal(NewLocation.X))
+			{
+				// This new location is OUTSIDE the horizontal map bounds. "Take back" (remove) the new X position from the new location.
+				NewLocation -= FVector(DistanceToMove.X, 0.0f, 0.0f);
+			}
+
+			// Move the player in the Z (up/down) direction
+			NewLocation += FVector(0.0f, 0.0f, DistanceToMove.Y);
+			if (!IsInMapBoundsVertical(NewLocation.Z))
+			{
+				// This new location is OUTSIDE the vertical map bounds. "Take back" (remove) the new Z position from the new location.
+				NewLocation -= FVector(0.0f, 0.0f, DistanceToMove.Y);
+			}
 
 			// Set the player's new location
 			SetActorLocation(NewLocation);
@@ -140,5 +158,31 @@ void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 {
 	//UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s - InputActionValue: %s"), *GetName(), *InputActionValue.ToString());
 	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, InputActionValue.ToString());
+}
+
+bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPos) const
+{
+	bool bResult = true;
+	UE_LOG(LogTopDownCharacter, Log, TEXT("----------------------------------------"));
+	UE_LOG(LogTopDownCharacter, Log, TEXT("IsInMapBoundsHorizontal"));
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - XPos:               %f"), XPos);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - HorizontalLimits.X: %f"), HorizontalLimits.X);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - HorizontalLimits.Y: %f"), HorizontalLimits.Y);
+	bResult = (XPos >= HorizontalLimits.X) && (XPos <= HorizontalLimits.Y);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
+	return bResult;
+}
+
+bool ATopDownCharacter::IsInMapBoundsVertical(float ZPos) const
+{
+	bool bResult = true;
+	UE_LOG(LogTopDownCharacter, Log, TEXT("----------------------------------------"));
+	UE_LOG(LogTopDownCharacter, Log, TEXT("IsInMapBoundsVertical"));
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - ZPos:             %f"), ZPos);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - VerticalLimits.X: %f"), VerticalLimits.X);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - VerticalLimits.Y: %f"), VerticalLimits.Y);
+	bResult = (ZPos >= VerticalLimits.X) && (ZPos <= VerticalLimits.Y);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
+	return bResult;
 }
 

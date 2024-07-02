@@ -30,6 +30,9 @@ protected:
 	void MoveCompleted(const struct FInputActionValue& InputActionValue);
 	void Shoot(const struct FInputActionValue& InputActionValue);
 
+	bool IsInMapBoundsHorizontal(float XPos) const;
+	bool IsInMapBoundsVertical(float ZPos) const;
+
 protected:
 	//  --- Components ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -54,6 +57,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Flipbook")
 	TObjectPtr<class UPaperFlipbook> RunFlipbook;
+
+	//  --- Map Limits ---
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Map Limits")
+	FVector2D HorizontalLimits;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Map Limits")
+	FVector2D VerticalLimits;
 
 	// --- Movement ---
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Movement")
