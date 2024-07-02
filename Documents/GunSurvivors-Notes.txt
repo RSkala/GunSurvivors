@@ -229,3 +229,69 @@ void ATopDownCharacter::Tick(float DeltaTime)
 
 
 ========================================================================
+33. Switching Flipbooks
+
+-------------------
+Changing Flipbooks
+-------------------
+You need a reference to a UPaperFlipbook object.
+* NOTE: This is DIFFERENT from a UPaperFlipbookComponent
+* A UPaperFlipbook is a reference to the actual Flipbook ASSET
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Flipbook")
+	TObjectPtr<class UPaperFlipbook> IdleFlipbook;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Flipbook")
+	TObjectPtr<class UPaperFlipbook> RunFlipbook;
+
+Set the Flipbook from the FlipbookComponent:
+CharacterFlipbookComponent->SetFlipbook(RunFlipbook);
+...
+CharacterFlipbookComponent->SetFlipbook(IdleFlipbook);
+
+------------------------------
+Changing Flipbook Directions
+------------------------------
+
+You can do this in one of two ways:
+* Negating a SCALE (-1)
+* Rotating by 180 degrees
+
+For example:
+To make the player face LEFT:
+* Setting the X scale of the flipbook to -1
+OR
+* Rotate around the Z axis by 180 degrees (Roll)
+
+BOTH methods are VALID ways to do it. Here, we will be negating the scale
+
+Getting the Scale of a Flipbook:
+		FVector FlipbookScale = CharacterFlipbookComponent->GetComponentScale();
+
+Setting the Scale of a Flipbook:
+CharacterFlipbookComponent->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+
+
+FVector FlipbookScale = CharacterFlipbookComponent->GetComponentScale();
+if (MovementDirection.X < 0.0f)
+{
+	// Moving Left
+	if (FlipbookScale.X > 0.0f)
+	{
+		// Flip the flipbook scale to face left (if it hasn't been flipped already)
+		CharacterFlipbookComponent->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+	}
+}
+else if (MovementDirection.X > 0.0f)
+{
+	// Moving Right
+	if (FlipbookScale.X < 0.0f)
+	{
+		// Flip the flipbook scale to face left (if it hasn't been flipped already)
+		CharacterFlipbookComponent->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+	}
+}
+
+========================================================================
+
+

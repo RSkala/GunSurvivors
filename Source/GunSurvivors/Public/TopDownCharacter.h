@@ -48,6 +48,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Input")
 	TObjectPtr<class UInputAction> ShootInputAction;
 
+	//  --- Flipbook ---
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Flipbook")
+	TObjectPtr<class UPaperFlipbook> IdleFlipbook;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Flipbook")
+	TObjectPtr<class UPaperFlipbook> RunFlipbook;
+
 	// --- Movement ---
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Movement")
 	float MovementSpeed = 100.0f;
