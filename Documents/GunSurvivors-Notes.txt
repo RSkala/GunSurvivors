@@ -31,4 +31,72 @@ Camera:
 In order to use Flipbook in the game, you must use a Flipbook component. Flipbook Components do not accept Sprites, so even if you have a single frame animation, you still need to make a Flipbook from the single Sprite.
 
 ====================================
+28. Player Class & Blueprint
+
+-------------------------
+Setting up C++ portion
+-------------------------
+
+ATopDownCharacter
+
+Components for 2D Characters:
+#include "Components/CapsuleComponent.h"
+#include "PaperFlipbookComponent.h"
+
+UPROPERTIES:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UCapsuleComponent> CapsuleComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UPaperFlipbookComponent> PaperFlipbookComponent;
+
+	VisibleAnywhere: Means we can see it in the Editor
+	BlueprintReadWrite: Means we can read and write to it from Blueprint Graphs (i.e. Getters and Setters)
+
+Create Components using:
+CreateDefaultSubobject()
+
+Set the root component of the object using:
+SetRootComponent()
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+	SetRootComponent(CapsuleComponent);
+
+Create and attach a component to another component:
+	CharacterFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterFlipbookComponent"));
+	CharacterFlipbookComponent->SetupAttachment(RootComponent);
+
+Note:
+RootComponent is set using SetRootComponent(), so you could also do: 
+CharacterFlipbookComponent->SetupAttachment(CapsuleComponent);
+
+NOTE:
+If you are creating a SpringArm and a Child Camera, you would set them up like this:
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName); // Attach camera to SpringArm's socket
+
+-------------------------
+Setting Up Blueprint
+-------------------------
+After creating a Blueprint class with our TopDownCharacter as the parent class, you will see the components in the Hierarchy.
+
+Flipbook (CharacterFlipbookComponent):
+* Set the Flipbook in the Details -> Sprite -> Source Flipbook
+  * Play Rate changes the speed at which the flipbook animation is played.
+* Turn off Sprite collision, as we will use the Capsule
+* If not set, use TranslucentUnlitSpriteMaterial in order to set the Rendering->Advanced->Translucency Sort Priority
+
+CapsuleComponent:
+* Adjust CapsuleHalfHeight and CapsuleRadius around the sprite
+* Change collision preset to Pawn
+  * Set to "Pawn" because the owning object (the player) is a Pawn
+
+--------------------------------------------------
+Adding a player character to the scene for testing
+--------------------------------------------------
+* Drag a BP_Player into the scene.
+* Allow this BP_Player instance to be controlled by the player:
+  * Details -> Pawn -> Auto Possess Player: Player 0 (Changed from Disabled)
+    * (Do this for testing until you update the GameMode with a Default Pawn class and a PlayerStart in the level)
+
+====================================
 
