@@ -162,4 +162,33 @@ if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	}
 }
 
-====================================
+========================================================================
+31. Binding Actions
+
+For binding actions, Bind a function which passes an object of type FInputActionValue:
+
+	void MoveTriggered(const struct FInputActionValue& InputActionValue);
+	void MoveCompleted(const struct FInputActionValue& InputActionValue);
+	void Shoot(const struct FInputActionValue& InputActionValue);
+
+Bind the functions in SetupPlayerInputComponent()
+void ATopDownCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+
+Since UInputComponent* PlayerInputComponent is being passed, we can cast this:
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
+		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Completed, this, &ThisClass::MoveCompleted);
+		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Canceled, this, &ThisClass::MoveCompleted);
+
+		EnhancedInputComponent->BindAction(ShootInputAction, ETriggerEvent::Started, this, &ThisClass::Shoot);
+		EnhancedInputComponent->BindAction(ShootInputAction, ETriggerEvent::Triggered, this, &ThisClass::Shoot);
+	}
+
+In the bound input functions, access the input values:
+FVector2D MoveActionValue = InputActionValue.Get<FVector2d>();
+
+
+
+========================================================================

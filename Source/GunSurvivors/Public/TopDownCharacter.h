@@ -26,16 +26,25 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MoveTriggered(const struct FInputActionValue& InputActionValue);
+	void MoveCompleted(const struct FInputActionValue& InputActionValue);
+	void Shoot(const struct FInputActionValue& InputActionValue);
+
 protected:
+	//  --- Components ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UCapsuleComponent> CapsuleComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UPaperFlipbookComponent> CharacterFlipbookComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	//  --- Input ---
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Input")
 	TObjectPtr<class UInputMappingContext> InputMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Input")
 	TObjectPtr<class UInputAction> MoveInputAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Input")
+	TObjectPtr<class UInputAction> ShootInputAction;
 };
