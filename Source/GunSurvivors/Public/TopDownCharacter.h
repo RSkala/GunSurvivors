@@ -47,4 +47,14 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Input")
 	TObjectPtr<class UInputAction> ShootInputAction;
+
+	// --- Movement ---
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Movement")
+	float MovementSpeed = 100.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Movement")
+	FVector2D MovementDirection;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Movement")
+	bool bCanMove = true;
 };

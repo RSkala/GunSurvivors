@@ -50,7 +50,7 @@ UPROPERTIES:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UPaperFlipbookComponent> PaperFlipbookComponent;
 
-	VisibleAnywhere: Means we can see it in the Editor
+	VisibleAnywhere: Means we can see it in the Editor (cannot be edited at all)
 	BlueprintReadWrite: Means we can read and write to it from Blueprint Graphs (i.e. Getters and Setters)
 
 Create Components using:
@@ -189,6 +189,43 @@ Since UInputComponent* PlayerInputComponent is being passed, we can cast this:
 In the bound input functions, access the input values:
 FVector2D MoveActionValue = InputActionValue.Get<FVector2d>();
 
+========================================================================
+32. Player Movement
+
+Set the movement direction:
+FVector2D MoveActionValue = InputActionValue.Get<FVector2d>();
+MovementDirection = MoveActionValue;
+
+Update player movement
+void ATopDownCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// Check if player can move
+	if (bCanMove)
+	{
+		// Check if player has any input
+		if (MovementDirection.Length() > 0.0f)
+		{
+			if (MovementDirection.Length() > 1.0f)
+			{
+				MovementDirection.Normalize(); // Note: We could also go MovementDirection.GetSafeNormal() and use that
+			}
+
+			// Get the distance to move this frame using the movement direction
+			FVector2D DistanceToMove = MovementDirection * MovementSpeed * DeltaTime;
+
+			// Get the current position of the player at this frame
+			FVector CurrentLocation = GetActorLocation();
+
+			// The player moves in the XZ plane
+			FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, 0.0f, DistanceToMove.Y);
+
+			// Set the player's new location
+			SetActorLocation(NewLocation);
+		}
+	}
+}
 
 
 ========================================================================

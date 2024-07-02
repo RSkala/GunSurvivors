@@ -49,6 +49,31 @@ void ATopDownCharacter::BeginPlay()
 void ATopDownCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// Check if player can move
+	if (bCanMove)
+	{
+		// Check if player has any input
+		if (MovementDirection.Length() > 0.0f)
+		{
+			if (MovementDirection.Length() > 1.0f)
+			{
+				MovementDirection.Normalize(); // Note: We could also go MovementDirection.GetSafeNormal() and use that
+			}
+
+			// Get the distance to move this frame using the movement direction
+			FVector2D DistanceToMove = MovementDirection * MovementSpeed * DeltaTime;
+
+			// Get the current position of the player at this frame
+			FVector CurrentLocation = GetActorLocation();
+
+			// The player moves in the XZ plane
+			FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, 0.0f, DistanceToMove.Y);
+
+			// Set the player's new location
+			SetActorLocation(NewLocation);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -72,19 +97,26 @@ void ATopDownCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ATopDownCharacter::MoveTriggered(const FInputActionValue& InputActionValue)
 {
 	FVector2D MoveActionValue = InputActionValue.Get<FVector2d>();
-	UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::MoveTriggered - %s - MoveActionValue: %s"), *GetName(), *MoveActionValue.ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::White, MoveActionValue.ToString());
+	//UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::MoveTriggered - %s - MoveActionValue: %s"), *GetName(), *MoveActionValue.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::White, MoveActionValue.ToString());
+
+	if (bCanMove)
+	{
+		MovementDirection = MoveActionValue;
+	}
 }
 
 void ATopDownCharacter::MoveCompleted(const FInputActionValue& InputActionValue)
 {
-	UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::MoveCompleted - %s - InputActionValue: %s"), *GetName(), *InputActionValue.ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, InputActionValue.ToString());
+	//UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::MoveCompleted - %s - InputActionValue: %s"), *GetName(), *InputActionValue.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, InputActionValue.ToString());
+	//MovementDirection = FVector2D(0.0f, 0.0f);
+	MovementDirection = FVector2D::ZeroVector;
 }
 
 void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 {
-	UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s - InputActionValue: %s"), *GetName(), *InputActionValue.ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, InputActionValue.ToString());
+	//UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s - InputActionValue: %s"), *GetName(), *InputActionValue.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, InputActionValue.ToString());
 }
 
