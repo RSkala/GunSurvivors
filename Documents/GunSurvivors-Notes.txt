@@ -8,9 +8,22 @@ https://www.udemy.com/course/unreal-engine-2d/learn/lecture/44277214#overview
 -----------------------------------
 
 ====================================
+26. The Arena
 
+Two Ways to Handle Sorting in 2D:
+* Use distance from camera (e.g. Y value)
+* Use TranslucentUnlitSpriteMaterial and set Rendering->Advanced->Translucency Sort Priority
+  * Sprites with lower numbers are drawn below sprites with higher numbers
 
+Collision:
+* This is set on both the SpriteComponent and CapsuleComponents (if it has a capsule)
 
+Camera:
+* Added camera to scene, as game camera will be static
+* Setting the in-scene camera for the player:
+  * Details -> Auto Player Activation -> Auto Activate for Player: Player0
+* Hide in-scene camera (prevent from blocking your view when editing the level)
+  * Set Scale to 0.01
 
 
 ====================================
