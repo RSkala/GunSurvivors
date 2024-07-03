@@ -421,3 +421,24 @@ Ensure the mouse cursor is always visible:
 PlayerController->SetShowMouseCursor(true);
 
 ========================================================================
+37. Creating the Bullet
+
+C++:
+#include "Components/SphereComponent.h"
+#include "PaperSpriteComponent.h"
+
+	// --- Components ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USphereComponent> SphereComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UPaperSpriteComponent> BulletSpriteComp;
+
+	// Create components
+	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+	SetRootComponent(SphereComp);
+
+	BulletSpriteComp = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("BulletSpriteComp"));
+	BulletSpriteComp->SetupAttachment(RootComponent);
+
+========================================================================
