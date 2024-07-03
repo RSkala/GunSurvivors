@@ -91,7 +91,7 @@ void ABullet::OverlapBegin(
 		if (Enemy->IsAlive())
 		{
 			DisableBullet();
-			//Enemy->Die();
+			Enemy->Die();
 		}
 	}
 }

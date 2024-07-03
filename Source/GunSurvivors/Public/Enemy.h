@@ -20,9 +20,13 @@ public:
 
 	bool IsAlive() const { return bIsAlive; }
 
+	void Die();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void OnDestroyTimerTimeout();
 
 protected:
 	// --- Components ---
@@ -31,6 +35,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UPaperFlipbookComponent> FlipbookComp;
+
+	// --- Flipbook Assets ---
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UPaperFlipbook> DeadFlipbookAsset;
 
 	// --- Player Reference ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -48,4 +56,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StopDistance = 20.0f;
+
+	struct FTimerHandle DestroyTimerHandle;
 };

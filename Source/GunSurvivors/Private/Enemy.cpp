@@ -4,6 +4,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
 
 #include "TopDownCharacter.h"
@@ -67,6 +68,30 @@ void AEnemy::Tick(float DeltaTime)
 	}
 }
 
+void AEnemy::Die()
+{
+	UE_LOG(LogEnemy, Log, TEXT("AEnemy::OnDestroyTimerTimeout - %s"), *GetName());
+
+	if (!bIsAlive)
+	{
+		return;
+	}
+
+	bIsAlive = false;
+	bCanFollow = false;
+
+	// Set the "dead" flipbook
+	check(FlipbookComp != nullptr);
+	FlipbookComp->SetFlipbook(DeadFlipbookAsset);
+
+	// Change the sorting (so it is one layer behind what it was when alive)
+	FlipbookComp->SetTranslucentSortPriority(-5);
+
+	// Remove the dead enemy from the scene after X seconds
+	const float DestroyTimeoutTimeSeconds = 5.0f;
+	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ThisClass::OnDestroyTimerTimeout, 1.0f, false, DestroyTimeoutTimeSeconds);
+}
+
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
@@ -89,5 +114,11 @@ void AEnemy::BeginPlay()
 			bCanFollow = true;
 		}
 	}
+}
+
+void AEnemy::OnDestroyTimerTimeout()
+{
+	UE_LOG(LogEnemy, Log, TEXT("AEnemy::OnDestroyTimerTimeout - %s"), *GetName());
+	Destroy();
 }
 

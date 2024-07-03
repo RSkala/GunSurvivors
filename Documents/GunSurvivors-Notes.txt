@@ -710,4 +710,32 @@ Debugging Notes:
 -----------------
 
 ========================================================================
+47. Enemy Death
+
+Destroying actor:
+Destroy();
+
+Timer:
+GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ThisClass::OnDestroyTimerTimeout, 1.0f, false, DestroyTimeoutTimeSeconds);
+
+This is in TimerManager.h:
+FORCEINLINE void SetTimer(FTimerHandle& InOutHandle, UserClass* InObj, typename FTimerDelegate::TMethodPtr< UserClass > InTimerMethod, float InRate, bool InbLoop = false, float InFirstDelay = -1.f)
+
+Note: There are multiple declarations for SetTimer()
+
+---------------------
+Dead FLipbook Asset:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UPaperFlipbook> DeadFlipbookAsset;
+
+Change  Flipbook:
+FlipbookComp->SetFlipbook(DeadFlipbookAsset);
+
+Change Sorting:
+FlipbookComp->SetTranslucentSortPriority(-5);
+
+UPrimitiveComponent::SetTranslucentSortPriority
+
+========================================================================
 
