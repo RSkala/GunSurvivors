@@ -527,4 +527,48 @@ Full Code:
 
 
 ========================================================================
+42. Custom Mouse Cursor
+
+Need a widget blueprint:
+NOTE: I set this up in TDP, and there was specific steps... TODO!
+
+WidgetBlueprint:
+WBP_MouseCursor
+* Canvas Panel
+  * Image
+Image: Set to Crosshair Sprite
+* Appearance -> Brush -> Image
+* Size X, Y: 50, 50
+
+Change "Fill Screen" to Desired On Screen
+
+Anchor: Center
+
+Project Settings:
+Edit -> Project Settings -> Engine -> User Interface -> Software Cursors
+* Click + to Add
+  * Set type to Default for this demo
+  * Change Class to our WBP_MouseCursor
+
+--------------------
+Notes regarding software cursors:
+* My notes are mouse cursors is in Evernote -> Unreal - UI/UMG -> Mouse Cursor (Custom)
+* They are limited by frame rate, so if your framerate is low, the mouse cursor will be choppy
+* At least in UE4, Software Cursors were limited by windows scaling (so different people would have different sizes)
+* Wastein tutorial on hardware cursors:
+   https://www.youtube.com/watch?v=3oSXhCeuu1Q
+
+Notes on Hardware Cursors:
+Hardware
+* This seems to be the BEST method. That is, DONT use software cursors
+* The PNG should be in the Slate folder
+* The Slate folder is AUTOMATICALLY cooked 
+* In the Content Browser, the Slate folder might look empty, but this is because Unreal expects there to be raw assets there.
+* Example Cursor Path: Slate/MouseCursor
+  * Notice there is NOT a file extension
+* Hot Spot is where the pointer "click" will occur. (0, 0) is the default and is the upper-left corner.
+* Wadstein has an excellent video about Hardware Cursor: https://www.youtube.com/watch?v=3oSXhCeuu1Q
+
+========================================================================
+
 
