@@ -5,7 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SceneComponent.h"
-#include "Engine/TimerHandle.h"
+//#include "Engine/TimerHandle.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
@@ -13,6 +13,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSpriteComponent.h"
+
+#include "Bullet.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogTopDownCharacter, Log, All)
 
@@ -204,8 +206,25 @@ void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 	{
 		bCanShoot = false;
 
-		// TODO: Bullet Spawn code
+		// Spawn the bullet
 		UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s"), *GetName());
+		ABullet* SpawnedBullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPosition->GetComponentLocation(), FRotator::ZeroRotator);
+		check(SpawnedBullet != nullptr);
+
+		// Get the world mouse position
+		FVector MouseWorldLocation, MouseWorldDirection;
+		APlayerController* PlayerController = Cast<APlayerController>(Controller);
+		check(PlayerController != nullptr);
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+
+		// Calculate bullet direction
+		FVector CurrentLocation = GetActorLocation();
+		FVector2D BulletDirection = FVector2D(MouseWorldLocation.X - CurrentLocation.X, MouseWorldLocation.Z - CurrentLocation.Z);
+		BulletDirection.Normalize();
+
+		// Launch the bullet
+		const float BulletSpeed = 300.0f;
+		SpawnedBullet->Launch(BulletDirection, BulletSpeed);
 
 		// Start the timer that allows the player to shoot again
 		GetWorldTimerManager().SetTimer(ShootCooldownTimerHandle, this, &ThisClass::OnShootCooldownTimerTimeout, 1.0f, false, ShootCooldownDurationSeconds);

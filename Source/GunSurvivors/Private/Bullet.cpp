@@ -21,7 +21,7 @@ ABullet::ABullet()
 	BulletSpriteComp->SetupAttachment(RootComponent);
 
 	// Initialize the movement direction to move to the right
-	MovementDirection = FVector2D(1.0f, 0.0f);
+	//MovementDirection = FVector2D(1.0f, 0.0f);
 }
 
 // Called every frame
@@ -63,7 +63,7 @@ void ABullet::BeginPlay()
 	Super::BeginPlay();
 
 	// test:
-	Launch(FVector2D(0.0f, 1.0f), 25.0f);
+	//Launch(FVector2D(0.0f, 1.0f), 25.0f);
 }
 
 void ABullet::OnDeleteTimerTimeout()

@@ -494,4 +494,37 @@ struct FTimerHandle ShootCooldownTimerHandle;
 GetWorldTimerManager().SetTimer(ShootCooldownTimerHandle, this, &ThisClass::OnShootCooldownTimerTimeout, 1.0f, false, ShootCooldownDurationSeconds);
 
 ========================================================================
+41. Shooting Bullets
+
+Get Direction from Player to Mouse:
+(MouseLocation - PlayerPosition)
+
+Spawning Bullets:
+
+	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Shooting")
+	TSubclassOf<class ABullet> BulletActorToSpawn;
+
+Full Code:
+		// Spawn the bullet
+		UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s"), *GetName());
+		ABullet* SpawnedBullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPosition->GetComponentLocation(), FRotator::ZeroRotator);
+		check(SpawnedBullet != nullptr);
+
+		// Get the world mouse position
+		FVector MouseWorldLocation, MouseWorldDirection;
+		APlayerController* PlayerController = Cast<APlayerController>(Controller);
+		check(PlayerController != nullptr);
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+
+		// Calculate bullet direction
+		FVector CurrentLocation = GetActorLocation();
+		FVector2D BulletDirection = FVector2D(MouseWorldLocation.X - CurrentLocation.X, MouseWorldLocation.Z - CurrentLocation.Z);
+		BulletDirection.Normalize();
+
+		// Launch the bullet
+		const float BulletSpeed = 300.0f;
+		SpawnedBullet->Launch(BulletDirection, BulletSpeed);
+
+
+========================================================================
 

@@ -98,5 +98,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Shooting")
 	float ShootCooldownDurationSeconds = 0.3f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Shooting")
+	TSubclassOf<class ABullet> BulletActorToSpawn;
+
 	struct FTimerHandle ShootCooldownTimerHandle;
 };
