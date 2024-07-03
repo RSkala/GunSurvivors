@@ -4,11 +4,13 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SceneComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "GameFramework/Controller.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSpriteComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogTopDownCharacter, Log, All)
 
@@ -20,11 +22,26 @@ ATopDownCharacter::ATopDownCharacter()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-	SetRootComponent(CapsuleComponent);
+	// Create player character components
+	//CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
+	SetRootComponent(CapsuleComp);
 
 	CharacterFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterFlipbookComponent"));
 	CharacterFlipbookComponent->SetupAttachment(RootComponent);
+
+	// Create gun components
+	//DummyGunComp = CreateDefaultSubobject<USceneComponent>(TEXT("DummyGunComp"));
+	//DummyGunComp->SetupAttachment(RootComponent);
+
+	GunParentComp = CreateDefaultSubobject<USceneComponent>(TEXT("GunParentComp"));
+	GunParentComp->SetupAttachment(RootComponent);
+
+	GunSpriteComp = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("GunSpriteComp"));
+	GunSpriteComp->SetupAttachment(GunParentComp);
+
+	BulletSpawnPosition = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPosition"));
+	BulletSpawnPosition->SetupAttachment(GunSpriteComp);
 }
 
 // Called when the game starts or when spawned

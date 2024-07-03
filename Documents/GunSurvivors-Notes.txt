@@ -293,5 +293,84 @@ else if (MovementDirection.X > 0.0f)
 }
 
 ========================================================================
+34. Staying In Map Limits
 
 
+========================================================================
+35. Adding the Gun
+
+Gun:
+Gun will be a Sprite Component that rotates around the player
+The gun will be attached to a SceneComponent
+
+What is a "SceneComponent"?
+* A SceneComponent is a Component that has a Transform (meaning, it has a Position, Rotation and Scale) and nothing else.
+  * The equivalent in Unity would be "Transform"
+
+* The Gun will also have a "Bullet Spawn Position" (i.e. a FirePoint), which will also be a SceneComponent
+
+
+----
+C++ 
+----
+#include "Components/SceneComponent.h"
+#include "PaperSpriteComponent.h"
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class USceneComponent> GunParent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UPaperSpriteComponent> GunSprite;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class USceneComponent> BulletSpawnPosition;
+
+
+----------------------------------------------------------------------------------
+NOTE:
+* Had an issue where I could not edit the rotation (only the scale) in the BP_Player blueprint.
+
+These are for BLANK Details panels:
+
+https://forums.unrealengine.com/t/solved-blank-detail-panel-for-ustaticmeshcomopnent-in-child-blueprint-class-of-a-c-class/141378/4
+
+FIXES:
+(1)
+You need to re-create the Blueprint.
+
+Anytime you remove/change components or UPROPERTY meta of a default object, you will have to regenerate the Blueprint. Sometimes reparenting helps, but either way you are likely to lose data. You can add new components without issues usually, but removing or changing existing once will break the BP.
+
+The reason is that the UPROPERTY meta has already been serialized into the Blueprint.
+
+Never use EditDefaultsOnly or BlueprintReadWrite on a component - only use VisibleDefaultsOnly and BlueprintReadOnly.
+
+(2)
+Instead of recreating the blueprint, renaming the component (and the display name), compile in code and opening can fix it. If you reference that comp in the blueprint itself you will probably need to relink those.
+
+https://github.com/rweber89/BPCorruptionFix
+
+
+-----------------------------
+https://forums.unrealengine.com/t/static-mesh-inherited-from-c-class-only-shows-scale-option/318257
+
+-----------------------------
+Saving:
+CapsuleComponent:
+Capsule Half Height: 44.0
+Capsule Radius: 22.0
+
+Collision: OverlapAllDynamic (default)
+
+-----------------------------
+
+MY FIX:
+* I made a DummyComp of type SceneComponent, attached the GunComp to that.
+* The GunParentComp looked fine (meaning, it had Location, Rotation, Scale)
+* I then removed the creation of DummyComp. 
+* I shut down the Editor, compiled, reloaded the editor, and then it seems to have fixed it.
+* Note for future: Components set in C++ should be BlueprintReadOnly. Also never EditAnywhere or EditDefaultsOnly (VisibleAnywhere and VisibleDefaultsOnly should be ok).
+
+Note: CapsuleComponent no longer has the Location and Rotation either, but that wasn't fixed. Not sure if that is normal, however.
+
+
+========================================================================

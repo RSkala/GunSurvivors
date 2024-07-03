@@ -6,7 +6,6 @@
 #include "GameFramework/Pawn.h"
 #include "TopDownCharacter.generated.h"
 
-
 UCLASS()
 class GUNSURVIVORS_API ATopDownCharacter : public APawn
 {
@@ -35,11 +34,23 @@ protected:
 
 protected:
 	//  --- Components ---
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TObjectPtr<class UCapsuleComponent> CapsuleComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UCapsuleComponent> CapsuleComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UPaperFlipbookComponent> CharacterFlipbookComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USceneComponent> DummyGunComp; // This is a workaround for not being able to set GunParentComp's Rotation and Location in the Blueprint Editor
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USceneComponent> GunParentComp; // This should be a child of Dummy
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UPaperSpriteComponent> GunSpriteComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USceneComponent> BulletSpawnPosition;
 
 	//  --- Input ---
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TopDownCharacter|Input")
