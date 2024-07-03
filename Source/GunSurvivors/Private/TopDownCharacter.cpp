@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "GameFramework/Controller.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSpriteComponent.h"
 
@@ -51,9 +52,12 @@ void ATopDownCharacter::BeginPlay()
 
 	Super::BeginPlay();
 
-	// Register Inputs from the EnhancedInputLocalPlayerSubsystem (which is accessed from the LocalPlayer)
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
+		// Ensure the mouse cursor is always visible
+		PlayerController->SetShowMouseCursor(true);
+
+		// Register Inputs from the EnhancedInputLocalPlayerSubsystem (which is accessed from the LocalPlayer)
 		if (UEnhancedInputLocalPlayerSubsystem* InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			//InputSubsystem->AddMappingContext(InputMappingContext, 0, FModifyContextOptions());
@@ -108,6 +112,25 @@ void ATopDownCharacter::Tick(float DeltaTime)
 			// Set the player's new location
 			SetActorLocation(NewLocation);
 		}
+	}
+
+	// Rotate the gun
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		// Get the player's position in the XZ plane
+		FVector CurrentLocation = GetActorLocation();
+		FVector StartPos = FVector(CurrentLocation.X, 0.0f, CurrentLocation.Z);
+
+		// Get the mouse position in world coordinates in the XZ plane
+		FVector MouseWorldLocation, MouseWorldDirection;
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+		FVector TargetPos = FVector(MouseWorldLocation.X, 0.0f, MouseWorldLocation.Z);
+
+		// Create a rotation representing the vector from the player position to the mouse position
+		FRotator GunParentRotator = UKismetMathLibrary::FindLookAtRotation(StartPos, TargetPos);
+
+		// Set the GunParentComponent's rotation
+		GunParentComp->SetRelativeRotation(GunParentRotator);
 	}
 }
 

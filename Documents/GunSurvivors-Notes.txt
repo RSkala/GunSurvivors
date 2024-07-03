@@ -374,3 +374,50 @@ Note: CapsuleComponent no longer has the Location and Rotation either, but that 
 
 
 ========================================================================
+36. Rotating the Gun
+
+Rotating the Gun:
+* Use: FindLookatRotation()
+* Get the PlayerPosition (P).
+* Get the Mouse Position (M) in World Coordinates (convert from Screen to world)
+* Get the direction from the player to the mouse:  (M - P)
+* Use that direction for the look at rotation 
+
+Getting the Mouse Position:
+* APlayerController::DeprojectMousePositionToWorld
+* We do not need MouseWorldDirection, but we have to pass it in anyways
+
+FVector MouseWorldLocation, MouseWorldDirection;
+PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+
+Note:
+* Need to #include "Kismet/KismetMathLibrary.h"
+to use UKismetMathLibrary::FindLookAtRotation
+
+Full Code:
+
+	// Rotate the gun
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		// Get the player's position in the XZ plane
+		FVector CurrentLocation = GetActorLocation();
+		FVector StartPos = FVector(CurrentLocation.X, 0.0f, CurrentLocation.Z);
+
+		// Get the mouse position in world coordinates in the XZ plane
+		FVector MouseWorldLocation, MouseWorldDirection;
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+		FVector TargetPos = FVector(MouseWorldLocation.X, 0.0f, MouseWorldLocation.Z);
+
+		// Create a rotation representing the vector from the player position to the mouse position
+		FRotator GunParentRotator = UKismetMathLibrary::FindLookAtRotation(StartPos, TargetPos);
+
+		// Set the GunParentComponent's rotation
+		GunParentComp->SetRelativeRotation(GunParentRotator);
+	}
+
+
+----
+Ensure the mouse cursor is always visible:
+PlayerController->SetShowMouseCursor(true);
+
+========================================================================
