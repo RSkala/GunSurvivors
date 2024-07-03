@@ -5,6 +5,8 @@
 #include "Components/SphereComponent.h"
 #include "PaperSpriteComponent.h"
 
+#include "Enemy.h"
+
 DEFINE_LOG_CATEGORY_STATIC(LogBullet, Log, All)
 
 // Sets default values
@@ -62,12 +64,54 @@ void ABullet::BeginPlay()
 	UE_LOG(LogBullet, Log, TEXT("ABullet::BeginPlay - %s"), *GetName());
 	Super::BeginPlay();
 
-	// test:
-	//Launch(FVector2D(0.0f, 1.0f), 25.0f);
+	// Handle bullet collision
+	check(SphereComp != nullptr);
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OverlapBegin);
 }
 
 void ABullet::OnDeleteTimerTimeout()
 {
 	UE_LOG(LogBullet, Log, TEXT("ABullet::OnDeleteTimerTimeout - %s"), *GetName());
 	Destroy();
+}
+
+void ABullet::OverlapBegin(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent,
+	int32 OtherBodyIndex,
+	bool FromSweep,
+	const FHitResult& SweepResult)
+{
+	FString OtherActorName = OtherActor != nullptr ? OtherActor->GetName() : "(invalid)";
+	UE_LOG(LogBullet, Log, TEXT("ABullet::OverlapBegin - %s, OtherActor: %s"), *GetName(), *OtherActorName);
+
+	if (AEnemy* Enemy = Cast<AEnemy>(OtherActor))
+	{
+		if (Enemy->IsAlive())
+		{
+			DisableBullet();
+			//Enemy->Die();
+		}
+	}
+}
+
+void ABullet::DisableBullet()
+{
+	UE_LOG(LogBullet, Log, TEXT("ABullet::DisableBullet - %s"), *GetName());
+
+	if (bIsDisabled)
+	{
+		return;
+	}
+
+	bIsDisabled = true;
+
+	// Turn collision off the sphere
+	check(SphereComp != nullptr);
+	SphereComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// Destroy the sprite (this actor itself will remain however)
+	check(BulletSpriteComp != nullptr);
+	BulletSpriteComp->DestroyComponent();
 }

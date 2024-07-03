@@ -18,6 +18,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool IsAlive() const { return bIsAlive; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

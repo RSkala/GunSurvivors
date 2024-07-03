@@ -26,6 +26,17 @@ protected:
 
 	void OnDeleteTimerTimeout();
 
+	UFUNCTION()
+	void OverlapBegin(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent,
+		int32 OtherBodyIndex,
+		bool FromSweep,
+		const FHitResult& SweepResult);
+
+	void DisableBullet();
+
 protected:
 	// --- Components ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -43,6 +54,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsLaunched = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsDisabled = false;
 
 	struct FTimerHandle DeleteTimer;
 

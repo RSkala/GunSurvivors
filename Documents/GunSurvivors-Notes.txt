@@ -636,5 +636,78 @@ In Tick():
 		}
 
 ========================================================================
+46. Bullet-Enemy Collision
 
+Need to add Overlap
+
+-------------------------
+Collision / Overlaps
+-------------------------
+
+The function MUST have the following signature:
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_SixParams( FComponentBeginOverlapSignature, UPrimitiveComponent, OnComponentBeginOverlap, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex, bool, bFromSweep, const FHitResult &, SweepResult);
+
+=> This is on UPrimitveComponent:
+	UPROPERTY(BlueprintAssignable, Category="Collision")
+	FComponentBeginOverlapSignature OnComponentBeginOverlap;
+
+Example:
+	UFUNCTION()
+	void OverlapBegin(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent,
+		int32 OtherBodyIndex,
+		bool FromSweep,
+		const FHitResult& SweepResult);
+
+Since the Delegate is DYNAMIC and MULTICAST, subscribe to the delegate like this:
+SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OverlapBegin);
+
+NOTE:
+* DYNAMIC: This means the Delegate can be assigned in Blueprint Graphs
+* MULTICAST: This means the Delegate can have ONE OR MORE listeners / subscribers
+  * Listeners are added with Add()
+
+* NON-DYNAMIC: This means the Delegate CANNOT be assigned in Blueprint Graphs
+  * These will simply NOT have the word "DYNAMIC" in the declaration
+* SINGLE: This means the Delegate can have ONLY ONE listener / subscriber
+  * These will simply NOT have the word "MULTICAST" in the declaration
+  * Listeners are added with Bind()
+
+* Subscriber functions MUST be declared as UFUNCTION() otherwise, they will NOT work
+
+-------------------------
+Disabling Collision
+-------------------------
+
+Turn collision off a PrimitiveComponent:
+ENGINE_API virtual void SetCollisionEnabled(ECollisionEnabled::Type NewType);
+
+SphereComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+------------------------
+Destroy a Component
+------------------------
+
+Destroy a SceneComponent:
+ENGINE_API virtual void DestroyComponent(bool bPromoteChildren = false) override;
+
+
+BulletSpriteComp->DestroyComponent();
+
+NOTE: Not sure why you would do this...
+... This just destroys the Sprite...
+... Although we do this in the timer...
+
+
+-----------------
+Debugging Notes:
+* Collision was not working for me.
+* Shutting down the editor then relaunching seems to have fixed it.
+* I'm not sure if it was because my code was out of date (live coding) or not
+
+-----------------
+
+========================================================================
 
