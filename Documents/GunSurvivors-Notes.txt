@@ -570,5 +570,55 @@ Hardware
 * Wadstein has an excellent video about Hardware Cursor: https://www.youtube.com/watch?v=3oSXhCeuu1Q
 
 ========================================================================
+43. Creating the Enemy
+
+Create the enemy as normal (Capule, flipbook, etc)
+
+Get a reference to the player:
+#include "Kismet/GameplayStatics.h"
+
+Use:
+UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
+
+	// --- Player Reference ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<class ATopDownCharacter> Player;
+
+	// Set like this:
+	if (!Player.IsValid())
+	{
+		AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
+		if (PlayerActor != nullptr)
+		{
+			Player = Cast<ATopDownCharacter>(PlayerActor);
+		}
+	}
+
+
+========================================================================
+44. Enemy Follows Player
+
+Simple Move-To logic:
+
+In Tick():
+
+	// Enemy movement
+	if (bIsAlive && bCanFollow && Player.IsValid())
+	{
+		FVector CurrentLocation = GetActorLocation();
+		FVector PlayerLocation = Player->GetActorLocation();
+		FVector DirEnemyToPlayer = PlayerLocation - CurrentLocation;
+		float DistanceToPlayer = DirEnemyToPlayer.Length();
+
+		if (DistanceToPlayer >= StopDistance)
+		{
+			DirEnemyToPlayer.Normalize();
+			FVector NewLocation = CurrentLocation + (DirEnemyToPlayer * MovementSpeed * DeltaTime);
+			SetActorLocation(NewLocation);
+		}
+	}
+
+
+========================================================================
 
 
