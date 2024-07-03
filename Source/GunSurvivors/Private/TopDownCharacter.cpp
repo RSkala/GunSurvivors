@@ -203,26 +203,26 @@ void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPos) const
 {
 	bool bResult = true;
-	UE_LOG(LogTopDownCharacter, Log, TEXT("----------------------------------------"));
-	UE_LOG(LogTopDownCharacter, Log, TEXT("IsInMapBoundsHorizontal"));
-	UE_LOG(LogTopDownCharacter, Log, TEXT(" - XPos:               %f"), XPos);
-	UE_LOG(LogTopDownCharacter, Log, TEXT(" - HorizontalLimits.X: %f"), HorizontalLimits.X);
-	UE_LOG(LogTopDownCharacter, Log, TEXT(" - HorizontalLimits.Y: %f"), HorizontalLimits.Y);
+	//UE_LOG(LogTopDownCharacter, Log, TEXT("----------------------------------------"));
+	//UE_LOG(LogTopDownCharacter, Log, TEXT("IsInMapBoundsHorizontal"));
+	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - XPos:               %f"), XPos);
+	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - HorizontalLimits.X: %f"), HorizontalLimits.X);
+	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - HorizontalLimits.Y: %f"), HorizontalLimits.Y);
 	bResult = (XPos >= HorizontalLimits.X) && (XPos <= HorizontalLimits.Y);
-	UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
+	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
 	return bResult;
 }
 
 bool ATopDownCharacter::IsInMapBoundsVertical(float ZPos) const
 {
 	bool bResult = true;
-	UE_LOG(LogTopDownCharacter, Log, TEXT("----------------------------------------"));
+	/*UE_LOG(LogTopDownCharacter, Log, TEXT("----------------------------------------"));
 	UE_LOG(LogTopDownCharacter, Log, TEXT("IsInMapBoundsVertical"));
 	UE_LOG(LogTopDownCharacter, Log, TEXT(" - ZPos:             %f"), ZPos);
 	UE_LOG(LogTopDownCharacter, Log, TEXT(" - VerticalLimits.X: %f"), VerticalLimits.X);
-	UE_LOG(LogTopDownCharacter, Log, TEXT(" - VerticalLimits.Y: %f"), VerticalLimits.Y);
+	UE_LOG(LogTopDownCharacter, Log, TEXT(" - VerticalLimits.Y: %f"), VerticalLimits.Y);*/
 	bResult = (ZPos >= VerticalLimits.X) && (ZPos <= VerticalLimits.Y);
-	UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
+	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
 	return bResult;
 }
 
