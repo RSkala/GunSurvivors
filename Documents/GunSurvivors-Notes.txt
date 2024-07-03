@@ -448,8 +448,6 @@ Bullet:
 * MoveDirection
 * MoveSpeed
 
-
-
 Quick Implementation:
 	// Update bullet movement
 	FVector BulletPosition = GetActorLocation();
@@ -475,3 +473,17 @@ Course Implementation
 
 
 ========================================================================
+39. Launching the Bullet
+
+Timer:
+GetWorldTimerManager().SetTimer
+
+
+Timers:
+FORCEINLINE void SetTimer(FTimerHandle& InOutHandle, UserClass* InObj, typename FTimerDelegate::TMethodPtr< UserClass > InTimerMethod, float InRate, bool InbLoop = false, float InFirstDelay = -1.f)
+
+Destroy Actor:
+Destroy();
+
+========================================================================
+

@@ -18,9 +18,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Launch(FVector2D InMovementDirection, float InMovementSpeed);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void OnDeleteTimerTimeout();
 
 protected:
 	// --- Components ---
@@ -36,5 +40,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MovementSpeed = 300.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsLaunched = false;
+
+	struct FTimerHandle DeleteTimer;
 
 };
