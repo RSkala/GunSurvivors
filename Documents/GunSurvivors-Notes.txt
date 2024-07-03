@@ -442,3 +442,36 @@ C++:
 	BulletSpriteComp->SetupAttachment(RootComponent);
 
 ========================================================================
+38. Moving the Bullet
+
+Bullet:
+* MoveDirection
+* MoveSpeed
+
+
+
+Quick Implementation:
+	// Update bullet movement
+	FVector BulletPosition = GetActorLocation();
+	FVector2D BulletPosition2D = FVector2D(BulletPosition.X, BulletPosition.Z);
+
+	FVector2D MovementAmount = MovementDirection * MovementSpeed * DeltaTime;
+
+	FVector NewPosition = FVector(BulletPosition2D.X, 0.0f, BulletPosition2D.Y) + FVector(MovementAmount.X, 0.0f, MovementAmount.Y);
+	
+	// Set the new bullet position
+	SetActorLocation(NewPosition);
+
+Course Implementation 
+* Note: This doesn't take into consideration that the player might not be 0 in the Y:
+	// Update bullet movement
+	FVector2D DistanceToMove = MovementDirection * MovementSpeed * DeltaTime;
+
+	FVector CurrentLocation = GetActorLocation();
+	FVector NewLocation = CurrentLocation + FVector(DistanceToMove.X, 0.0f, DistanceToMove.Y);
+
+	SetActorLocation(NewLocation);
+
+
+
+========================================================================

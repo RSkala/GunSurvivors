@@ -29,4 +29,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UPaperSpriteComponent> BulletSpriteComp;
+
+	// --- Movement ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FVector2D MovementDirection;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MovementSpeed = 300.0f;
+
 };
