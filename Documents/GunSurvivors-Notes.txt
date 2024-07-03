@@ -470,8 +470,6 @@ Course Implementation
 
 	SetActorLocation(NewLocation);
 
-
-
 ========================================================================
 39. Launching the Bullet
 
@@ -484,6 +482,16 @@ FORCEINLINE void SetTimer(FTimerHandle& InOutHandle, UserClass* InObj, typename 
 
 Destroy Actor:
 Destroy();
+
+========================================================================
+40. Shooting Cooldown
+
+use a timer handle:
+
+struct FTimerHandle ShootCooldownTimerHandle;
+
+// Start the timer that allows the player to shoot again
+GetWorldTimerManager().SetTimer(ShootCooldownTimerHandle, this, &ThisClass::OnShootCooldownTimerTimeout, 1.0f, false, ShootCooldownDurationSeconds);
 
 ========================================================================
 

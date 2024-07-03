@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SceneComponent.h"
+#include "Engine/TimerHandle.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
@@ -198,6 +199,23 @@ void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 {
 	//UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s - InputActionValue: %s"), *GetName(), *InputActionValue.ToString());
 	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, InputActionValue.ToString());
+
+	if (bCanShoot)
+	{
+		bCanShoot = false;
+
+		// TODO: Bullet Spawn code
+		UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::Shoot - %s"), *GetName());
+
+		// Start the timer that allows the player to shoot again
+		GetWorldTimerManager().SetTimer(ShootCooldownTimerHandle, this, &ThisClass::OnShootCooldownTimerTimeout, 1.0f, false, ShootCooldownDurationSeconds);
+	}
+}
+
+void ATopDownCharacter::OnShootCooldownTimerTimeout()
+{
+	UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::OnShootCooldownTimerTimeout - %s"), *GetName());
+	bCanShoot = true;
 }
 
 bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPos) const
@@ -225,4 +243,3 @@ bool ATopDownCharacter::IsInMapBoundsVertical(float ZPos) const
 	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
 	return bResult;
 }
-

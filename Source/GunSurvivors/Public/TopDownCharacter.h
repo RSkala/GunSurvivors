@@ -25,10 +25,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// -- Movement --
 	void MoveTriggered(const struct FInputActionValue& InputActionValue);
 	void MoveCompleted(const struct FInputActionValue& InputActionValue);
-	void Shoot(const struct FInputActionValue& InputActionValue);
 
+	// --- Shooting ---
+	void Shoot(const struct FInputActionValue& InputActionValue);
+	void OnShootCooldownTimerTimeout();
+
+	// --- Map Bounds ---
 	bool IsInMapBoundsHorizontal(float XPos) const;
 	bool IsInMapBoundsVertical(float ZPos) const;
 
@@ -85,4 +90,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Movement")
 	bool bCanMove = true;
+
+	// --- Shooting --- 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Shooting")
+	bool bCanShoot = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Shooting")
+	float ShootCooldownDurationSeconds = 0.3f;
+
+	struct FTimerHandle ShootCooldownTimerHandle;
 };
