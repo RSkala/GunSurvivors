@@ -620,5 +620,21 @@ In Tick():
 
 
 ========================================================================
+45. Flip Enemy Flipbook
+
+		// Face the player
+		CurrentLocation = GetActorLocation();
+		float FlipbookXScale = FlipbookComp->GetComponentScale().X;
+
+		if ((PlayerLocation.X - CurrentLocation.X) >= 0.0f) // player is on the right side of the enemy (so enemy should face RIGHT)
+		{
+			FlipbookComp->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+		}
+		else // player is on the left side of the enemy (so the enemy should face LEFT)
+		{
+			FlipbookComp->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+		}
+
+========================================================================
 
 

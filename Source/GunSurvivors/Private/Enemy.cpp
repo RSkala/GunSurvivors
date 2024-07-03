@@ -34,6 +34,7 @@ void AEnemy::Tick(float DeltaTime)
 	// Enemy movement
 	if (bIsAlive && bCanFollow && Player.IsValid())
 	{
+		// Move toward player
 		FVector CurrentLocation = GetActorLocation();
 		FVector PlayerLocation = Player->GetActorLocation();
 		FVector DirEnemyToPlayer = PlayerLocation - CurrentLocation;
@@ -44,6 +45,24 @@ void AEnemy::Tick(float DeltaTime)
 			DirEnemyToPlayer.Normalize();
 			FVector NewLocation = CurrentLocation + (DirEnemyToPlayer * MovementSpeed * DeltaTime);
 			SetActorLocation(NewLocation);
+		}
+
+		// Face the player
+		CurrentLocation = GetActorLocation();
+		float FlipbookXScale = FlipbookComp->GetComponentScale().X;
+		if ((PlayerLocation.X - CurrentLocation.X) >= 0.0f) // player is on the right side of the enemy (so enemy should face RIGHT)
+		{
+			if (FlipbookXScale < 0.0f)
+			{
+				FlipbookComp->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+			}
+		}
+		else // player is on the left side of the enemy (so the enemy should face LEFT)
+		{
+			if (FlipbookXScale > 0.0f)
+			{
+				FlipbookComp->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+			}
 		}
 	}
 }
