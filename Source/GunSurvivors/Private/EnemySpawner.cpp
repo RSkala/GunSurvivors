@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Enemy.h"
+#include "GunSurvivorsGameMode.h"
 #include "TopDownCharacter.h"
 
 
@@ -28,6 +29,10 @@ void AEnemySpawner::Tick(float DeltaTime)
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Get a reference to the GameMode
+	GunSurvivorsGameMode = Cast<AGunSurvivorsGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	check(GunSurvivorsGameMode != nullptr);
 
 	// Get player reference
 	if (!Player.IsValid())
@@ -111,6 +116,13 @@ void AEnemySpawner::SetupEnemy(AEnemy* Enemy)
 	{
 		Enemy->SetPlayerTarget(Player.Get());
 		Enemy->SetCanFollow(true);
+		Enemy->EnemyDiedDelegate.AddDynamic(this, &ThisClass::OnEnemyDied);
 	}
+}
+
+void AEnemySpawner::OnEnemyDied()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, TEXT("enemy died"));
+	//MyGameMode->AddScore
 }
 

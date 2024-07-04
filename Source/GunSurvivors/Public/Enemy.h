@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEnemyDiedDelegate);
+
 UCLASS()
 class GUNSURVIVORS_API AEnemy : public AActor
 {
@@ -29,6 +31,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	void OnDestroyTimerTimeout();
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FEnemyDiedDelegate EnemyDiedDelegate;
 
 protected:
 	// --- Components ---

@@ -28,6 +28,9 @@ protected:
 	void SpawnEnemy();
 	void SetupEnemy(class AEnemy* Enemy);
 
+	UFUNCTION()
+	void OnEnemyDied();
+
 protected:
 	/** Enemy actor to spawn */
 	UPROPERTY(EditDefaultsOnly)
@@ -59,6 +62,10 @@ protected:
 	// --- Player Reference ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<class ATopDownCharacter> Player;
+
+	// --- GameMode Reference --
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class AGunSurvivorsGameMode> GunSurvivorsGameMode;
 
 	/** Handle for spawn timer */
 	struct FTimerHandle SpawnTimerHandle;

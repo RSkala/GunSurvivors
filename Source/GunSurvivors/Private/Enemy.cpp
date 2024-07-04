@@ -87,6 +87,9 @@ void AEnemy::Die()
 	// Change the sorting (so it is one layer behind what it was when alive)
 	FlipbookComp->SetTranslucentSortPriority(-5);
 
+	// Notify any subscribers that an enemy died
+	EnemyDiedDelegate.Broadcast();
+
 	// Remove the dead enemy from the scene after X seconds
 	const float DestroyTimeoutTimeSeconds = 5.0f;
 	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ThisClass::OnDestroyTimerTimeout, 1.0f, false, DestroyTimeoutTimeSeconds);
