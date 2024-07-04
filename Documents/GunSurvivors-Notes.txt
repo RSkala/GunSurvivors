@@ -917,4 +917,25 @@ Getting the Game Mode:
 53. Score System
 
 ========================================================================
+54. HUD Widget
 
+WidgetBlueprint
+* Content Browser -> Right-click -> User Interface -> Widget Blueprint
+  * In general, use UserWidget and the Parent Class for your WidgetBlueprint
+
+WBP_HUD - Designer:
+* Canvas Panel
+  * Text (ScoreText)
+    * Anchor to top right
+    * Appearance -> Font -> Size: 60
+    * Slot -> Canvas Panel Slot -> Size X,Y: 437, 82
+    * Details -> Is Variable: TRUE 
+      * This makes it an accessible variable
+
+WBP_HUD - Graph:
+* Create Function: SetScoreText
+  * Details -> Inputs -> Add
+    * Integer, "NewScore"
+    * Access the ScoreText variable
+
+========================================================================
