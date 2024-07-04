@@ -723,6 +723,10 @@ FORCEINLINE void SetTimer(FTimerHandle& InOutHandle, UserClass* InObj, typename 
 
 Note: There are multiple declarations for SetTimer()
 
+NOTE:
+* In the videos, he includes TimerHandle.h. I don't do that and the game still compiles fine.
+#include "Engine/TimerHandle.h"
+
 ---------------------
 Dead FLipbook Asset:
 
@@ -736,6 +740,24 @@ Change Sorting:
 FlipbookComp->SetTranslucentSortPriority(-5);
 
 UPrimitiveComponent::SetTranslucentSortPriority
+
+========================================================================
+48. The Enemy Spawner
+
+	/** Enemy actor to spawn */
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AEnemy> EnemyActorToSpawn;
+
+=> This gets assigned in the Editor (i.e. in the CDO, Class Default Object) because of the EditDefaultsOnly
+
+Start Timer:
+GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &ThisClass::OnSpawnTimerTimeout, SpawnTime, true, SpawnTime);
+
+Stop Timer:
+GetWorldTimerManager().ClearTimer(SpawnTimerHandle);
+
+Spawn Enemy:
+AEnemy* SpawnedEnemy = World->SpawnActor<AEnemy>(EnemyActorToSpawn, EnemyLocation, FRotator::ZeroRotator);
 
 ========================================================================
 
