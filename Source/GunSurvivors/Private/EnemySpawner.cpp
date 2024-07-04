@@ -47,9 +47,19 @@ void AEnemySpawner::SpawnEnemy()
 {
 	UE_LOG(LogEnemySpawner, Log, TEXT("AEnemySpawner::SpawnEnemy"));
 
+	// Get a random position WITHIN the unit sphere. Cast to FVector2D.
+	FVector2D RandomPosition = FVector2D(FMath::VRand());
+
+	// Normalize the random position to "push" the position to the edge of the unit circle
+	RandomPosition.Normalize();
+
+	// Multiply by the spawn distance for the spawn position on the circle
+	RandomPosition *= SpawnDistance;
+
+	// Spawn the enemy at the location
 	if (UWorld* World = GetWorld())
 	{
-		FVector EnemyLocation = GetActorLocation();
+		FVector EnemyLocation = GetActorLocation() + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
 		AEnemy* SpawnedEnemy = World->SpawnActor<AEnemy>(EnemyActorToSpawn, EnemyLocation, FRotator::ZeroRotator);
 	}
 }

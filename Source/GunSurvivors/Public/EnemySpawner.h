@@ -36,6 +36,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnTime = 1.0f;
 
+	/** Distance from this EnemySpawner where enemies will be spawned */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SpawnDistance = 400.0f;
+
 	/** Handle for spawn timer */
 	struct FTimerHandle SpawnTimerHandle;
 };
