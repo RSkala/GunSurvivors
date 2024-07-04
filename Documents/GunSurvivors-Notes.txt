@@ -792,4 +792,47 @@ void AEnemySpawner::SpawnEnemy()
 
 
 ========================================================================
+50. Difficulty System
 
+Design:
+* Increase "difficulty" by a value of "1" for each enemy spawned
+* Increase difficulty "spike by "10" at certain times
+* Increase Spawn Time over time
+
+	// --- Difficulty ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalEnemyCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 DifficultySpikeInterval = 10; // Every 10th enemy, increase difficulty
+
+	/** Time between enemy spawns should go no lower than this value */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SpawnTimeMinimumLimit = 0.5;
+
+	/** Descrease the Time between enemy spawns by this value */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DecreaseSpawnTimerByEveryInterval = 0.05f; // DifficultySpikeInterval
+
+After enemy spawn:
+		// Increase the difficulty
+		TotalEnemyCount += 1;
+		if (TotalEnemyCount % DifficultySpikeInterval == 0)
+		{
+			// Ensure we haven't gone past the difficulty (spawn time) limit
+			if (SpawnTime > SpawnTimeMinimumLimit)
+			{
+				// Ensure we dont go below spawn time
+				SpawnTime -= DecreaseSpawnTimerByEveryInterval; // should be "increase"
+				if (SpawnTime < SpawnTimeMinimumLimit)
+				{
+					SpawnTime = SpawnTimeMinimumLimit;
+				}
+
+				// Stop and restart the spawning using the new SpawnTime
+				StopSpawning();
+				StartSpawning();
+			}
+		}
+
+========================================================================

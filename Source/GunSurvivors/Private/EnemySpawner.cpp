@@ -47,6 +47,8 @@ void AEnemySpawner::SpawnEnemy()
 {
 	UE_LOG(LogEnemySpawner, Log, TEXT("AEnemySpawner::SpawnEnemy"));
 
+	// Spawn the enemy
+
 	// Get a random position WITHIN the unit sphere. Cast to FVector2D.
 	FVector2D RandomPosition = FVector2D(FMath::VRand());
 
@@ -61,6 +63,26 @@ void AEnemySpawner::SpawnEnemy()
 	{
 		FVector EnemyLocation = GetActorLocation() + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
 		AEnemy* SpawnedEnemy = World->SpawnActor<AEnemy>(EnemyActorToSpawn, EnemyLocation, FRotator::ZeroRotator);
+
+		// Increase the difficulty
+		TotalEnemyCount += 1;
+		if (TotalEnemyCount % DifficultySpikeInterval == 0)
+		{
+			// Ensure we haven't gone past the difficulty (spawn time) limit
+			if (SpawnTime > SpawnTimeMinimumLimit)
+			{
+				// Ensure we dont go below spawn time
+				SpawnTime -= DecreaseSpawnTimerByEveryInterval; // should be "increase"
+				if (SpawnTime < SpawnTimeMinimumLimit)
+				{
+					SpawnTime = SpawnTimeMinimumLimit;
+				}
+
+				// Stop and restart the spawning using the new SpawnTime
+				StopSpawning();
+				StartSpawning();
+			}
+		}
 	}
 }
 

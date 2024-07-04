@@ -40,6 +40,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnDistance = 400.0f;
 
+	// --- Difficulty ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalEnemyCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 DifficultySpikeInterval = 10; // Every 10th enemy, increase difficulty
+
+	/** Time between enemy spawns should go no lower than this value */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SpawnTimeMinimumLimit = 0.5;
+
+	/** Descrease the Time between enemy spawns by this value */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DecreaseSpawnTimerByEveryInterval = 0.05f; // DifficultySpikeInterval
+
 	/** Handle for spawn timer */
 	struct FTimerHandle SpawnTimerHandle;
 };
