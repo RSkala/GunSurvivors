@@ -939,3 +939,31 @@ WBP_HUD - Graph:
     * Access the ScoreText variable
 
 ========================================================================
+55. Sending the Score
+
+In GameMode:
+BP_GunSurvivorsGameMode
+* Event BeginPlay
+  * Create Widget Node -> Class: WBP_HUD
+    * return value -> Promote to Variable:  HUD
+  * HUD -> Drag -> Add to Viewport
+
+--------------------------
+C++:
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChangedDelegate, int, NewScore);
+...
+	UPROPERTY(BlueprintAssignable)
+	FScoreChangedDelegate ScoreChangedDelegate;
+...
+
+ScoreChangedDelegate.Broadcast(Score);
+--------------------------
+
+In Event Graph:
+* Right Click -> Bind Event to Score Changed Delegate, set after adding the HUD to viewport
+
+* Right Click -> Custom Event -> "OnScoreChangedDelegateFired"
+  * This must have the same inputs that the delegate requires (e.g. _OneParam(), _TwoParams(), etc)
+
+========================================================================

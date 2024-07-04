@@ -17,8 +17,9 @@ void AGunSurvivorsGameMode::SetScore(int NewScore)
 	{
 		return;
 	}
-
 	Score = NewScore;
+	
+	ScoreChangedDelegate.Broadcast(Score);
 }
 
 void AGunSurvivorsGameMode::AddToScore(int AmountToAdd)
