@@ -21,6 +21,8 @@ public:
 	bool IsAlive() const { return bIsAlive; }
 
 	void Die();
+	void SetPlayerTarget(class ATopDownCharacter* InPlayer); // Cannot assign here as this is a foward declaration. Must do the assignment in the cpp file.
+	void SetCanFollow(bool bInCanFollow) { bCanFollow = bInCanFollow; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,7 +43,7 @@ protected:
 	TObjectPtr<class UPaperFlipbook> DeadFlipbookAsset;
 
 	// --- Player Reference ---
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<class ATopDownCharacter> Player;
 
 	// --- Lifetime / Movement ---

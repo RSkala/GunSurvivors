@@ -92,12 +92,17 @@ void AEnemy::Die()
 	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ThisClass::OnDestroyTimerTimeout, 1.0f, false, DestroyTimeoutTimeSeconds);
 }
 
+void AEnemy::SetPlayerTarget(ATopDownCharacter* InPlayer)
+{
+	Player = InPlayer;
+}
+
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (Player == nullptr)
+	/*if (Player == nullptr)
 	{
 		UE_LOG(LogEnemy, Log, TEXT("AEnemy::BeginPlay - %s - Player is nullptr"), *GetName());
 	}
@@ -113,7 +118,7 @@ void AEnemy::BeginPlay()
 			Player = Cast<ATopDownCharacter>(PlayerActor);
 			bCanFollow = true;
 		}
-	}
+	}*/
 }
 
 void AEnemy::OnDestroyTimerTimeout()

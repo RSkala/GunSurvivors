@@ -836,3 +836,39 @@ After enemy spawn:
 		}
 
 ========================================================================
+51. Setup Enemy
+
+Moved getting of player class out of enemy and into enemy spawner
+
+TSoftObjectPtr:
+* Couldnt set the value in the header, as it was a forward declaration. Needed to be done in C++
+
+	// --- Player Reference ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<class ATopDownCharacter> Player;
+
+	AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
+	if (PlayerActor != nullptr)
+	{
+		Player = Cast<ATopDownCharacter>(PlayerActor);
+	}
+
+void AEnemySpawner::SetupEnemy(AEnemy* Enemy)
+{
+	if (Enemy != nullptr)
+	{
+		Enemy->SetPlayerTarget(Player.Get());
+		Enemy->SetCanFollow(true);
+	}
+}
+
+
+Enemy.h/.cpp:
+void SetPlayerTarget(class ATopDownCharacter* InPlayer); // Cannot assign here as this is a foward declaration. Must do the assignment in the cpp file.
+
+void AEnemy::SetPlayerTarget(ATopDownCharacter* InPlayer)
+{
+	Player = InPlayer;
+}
+
+========================================================================

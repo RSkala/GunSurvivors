@@ -3,8 +3,11 @@
 #include "EnemySpawner.h"
 //#include "Engine/World.h"
 //#include "Engine/TimerHandle.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Enemy.h"
+#include "TopDownCharacter.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogEnemySpawner, Log, All)
 
@@ -25,6 +28,21 @@ void AEnemySpawner::Tick(float DeltaTime)
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Get player reference
+	if (!Player.IsValid())
+	{
+		UE_LOG(LogEnemySpawner, Log, TEXT("AEnemy::BeginPlay - %s - Player is NOT valid... setting it"), *GetName());
+
+		AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
+		if (PlayerActor != nullptr)
+		{
+			UE_LOG(LogEnemySpawner, Log, TEXT("AEnemy::BeginPlay - %s - Set the player!"), *GetName());
+			Player = Cast<ATopDownCharacter>(PlayerActor);
+		}
+	}
+
+	// Start spawning
 	StartSpawning();
 }
 
@@ -63,6 +81,7 @@ void AEnemySpawner::SpawnEnemy()
 	{
 		FVector EnemyLocation = GetActorLocation() + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
 		AEnemy* SpawnedEnemy = World->SpawnActor<AEnemy>(EnemyActorToSpawn, EnemyLocation, FRotator::ZeroRotator);
+		SetupEnemy(SpawnedEnemy);
 
 		// Increase the difficulty
 		TotalEnemyCount += 1;
@@ -83,6 +102,15 @@ void AEnemySpawner::SpawnEnemy()
 				StartSpawning();
 			}
 		}
+	}
+}
+
+void AEnemySpawner::SetupEnemy(AEnemy* Enemy)
+{
+	if (Enemy != nullptr)
+	{
+		Enemy->SetPlayerTarget(Player.Get());
+		Enemy->SetCanFollow(true);
 	}
 }
 

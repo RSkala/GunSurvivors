@@ -26,6 +26,7 @@ protected:
 	void StartSpawning();
 	void StopSpawning();
 	void SpawnEnemy();
+	void SetupEnemy(class AEnemy* Enemy);
 
 protected:
 	/** Enemy actor to spawn */
@@ -54,6 +55,10 @@ protected:
 	/** Descrease the Time between enemy spawns by this value */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DecreaseSpawnTimerByEveryInterval = 0.05f; // DifficultySpikeInterval
+
+	// --- Player Reference ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<class ATopDownCharacter> Player;
 
 	/** Handle for spawn timer */
 	struct FTimerHandle SpawnTimerHandle;
