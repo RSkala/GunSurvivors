@@ -122,7 +122,11 @@ void AEnemySpawner::SetupEnemy(AEnemy* Enemy)
 
 void AEnemySpawner::OnEnemyDied()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, TEXT("enemy died"));
-	//MyGameMode->AddScore
+	// Increase Score
+	const int ScoreToAdd = 10;
+	if (GunSurvivorsGameMode != nullptr)
+	{
+		GunSurvivorsGameMode->AddToScore(10);
+	}
 }
 

@@ -13,5 +13,17 @@ UCLASS()
 class GUNSURVIVORS_API AGunSurvivorsGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AGunSurvivorsGameMode();
+	int GetScore() const { return Score; }
+	void SetScore(int NewScore);
+	void AddToScore(int AmountToAdd);
+
+protected:
+	virtual void BeginPlay() override;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int Score = 0;
 };
