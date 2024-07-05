@@ -198,7 +198,11 @@ void ATopDownCharacter::MoveCompleted(const FInputActionValue& InputActionValue)
 	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, InputActionValue.ToString());
 	//MovementDirection = FVector2D(0.0f, 0.0f);
 	MovementDirection = FVector2D::ZeroVector;
-	CharacterFlipbookComponent->SetFlipbook(IdleFlipbook);
+
+	if (bIsAlive)
+	{
+		CharacterFlipbookComponent->SetFlipbook(IdleFlipbook);
+	}
 }
 
 void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
