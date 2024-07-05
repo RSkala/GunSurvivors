@@ -238,7 +238,10 @@ void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 void ATopDownCharacter::OnShootCooldownTimerTimeout()
 {
 	UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::OnShootCooldownTimerTimeout - %s"), *GetName());
-	bCanShoot = true;
+	if (bIsAlive)
+	{
+		bCanShoot = true;
+	}
 }
 
 bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPos) const
