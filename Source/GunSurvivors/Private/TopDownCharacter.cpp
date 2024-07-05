@@ -15,6 +15,7 @@
 #include "PaperSpriteComponent.h"
 
 #include "Bullet.h"
+#include "Enemy.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogTopDownCharacter, Log, All)
 
@@ -67,6 +68,9 @@ void ATopDownCharacter::BeginPlay()
 			InputSubsystem->AddMappingContext(InputMappingContext, 0);
 		}
 	}
+
+	// Delegates
+	CapsuleComp->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OverlapBegin);
 }
 
 // Called every frame
@@ -261,4 +265,26 @@ bool ATopDownCharacter::IsInMapBoundsVertical(float ZPos) const
 	bResult = (ZPos >= VerticalLimits.X) && (ZPos <= VerticalLimits.Y);
 	//UE_LOG(LogTopDownCharacter, Log, TEXT(" - bResult:            %d"), bResult);
 	return bResult;
+}
+
+void ATopDownCharacter::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
+{
+	FString OtherActorName = OtherActor != nullptr ? OtherActor->GetName() : TEXT("(invalid)");
+	UE_LOG(LogTopDownCharacter, Log, TEXT("ATopDownCharacter::OverlapBegin - %s, OtherActor: %s"), *GetName(), *OtherActorName);
+
+	if (AEnemy* OverlappedEnemy = Cast<AEnemy>(OtherActor))
+	{
+		if (OverlappedEnemy->IsAlive())
+		{
+			if (bIsAlive)
+			{
+				// Player is alive and has collided with an Enemy. Mark player as dead, and disable moving and shooting.
+				bIsAlive = false;
+				bCanMove = false;
+				bCanShoot = false;
+
+				PlayerDiedDelegate.Broadcast();
+			}
+		}
+	}
 }

@@ -44,6 +44,7 @@ void AEnemySpawner::BeginPlay()
 		{
 			UE_LOG(LogEnemySpawner, Log, TEXT("AEnemy::BeginPlay - %s - Set the player!"), *GetName());
 			Player = Cast<ATopDownCharacter>(PlayerActor);
+			Player->PlayerDiedDelegate.AddUniqueDynamic(this, &ThisClass::OnPlayerDied);
 		}
 	}
 
@@ -128,5 +129,25 @@ void AEnemySpawner::OnEnemyDied()
 	{
 		GunSurvivorsGameMode->AddToScore(10);
 	}
+}
+
+void AEnemySpawner::OnPlayerDied()
+{
+	UE_LOG(LogEnemySpawner, Log, TEXT("AEnemySpawner::OnPlayerDied"));
+
+	// Player has died. Stop spawning.
+	StopSpawning();
+
+	TArray<AActor*> EnemyActorArray;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), EnemyActorArray);
+	for (AActor* EnemyActor : EnemyActorArray)
+	{
+		if (AEnemy* Enemy = Cast<AEnemy>(EnemyActor); Enemy->IsAlive())
+		{
+			Enemy->SetCanFollow(false);
+		}
+	}
+
+	// TODO: Restart Game
 }
 

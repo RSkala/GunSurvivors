@@ -31,6 +31,9 @@ protected:
 	UFUNCTION()
 	void OnEnemyDied();
 
+	UFUNCTION()
+	void OnPlayerDied();
+
 protected:
 	/** Enemy actor to spawn */
 	UPROPERTY(EditDefaultsOnly)

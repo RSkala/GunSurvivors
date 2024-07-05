@@ -967,3 +967,21 @@ In Event Graph:
   * This must have the same inputs that the delegate requires (e.g. _OneParam(), _TwoParams(), etc)
 
 ========================================================================
+56. Player Enemy Collision
+
+On Player Died, stop spawning and get all enemies:
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDiedDelegateSignature);
+...
+FPlayerDiedDelegateSignature PlayerDiedDelegate;
+...
+Player->PlayerDiedDelegate.AddUniqueDynamic(this, &ThisClass::OnPlayerDied);
+...
+
+	TArray<AActor*> EnemyArray;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), EnemyArray);
+
+NOTE: GetAllActorsOfClass() fills out the array with AActor pointers
+
+
+========================================================================
