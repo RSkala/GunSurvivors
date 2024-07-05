@@ -20,6 +20,9 @@ public:
 	void SetScore(int NewScore);
 	void AddToScore(int AmountToAdd);
 
+	void RestartGame();
+	void OnRestartGameTimerTimeout();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -27,6 +30,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int Score = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TimeBeforeRestart = 0.3f;
+
 	UPROPERTY(BlueprintAssignable)
 	FScoreChangedDelegate ScoreChangedDelegate;
+
+	// Timer Handle for restarting the game after a game over
+	FTimerHandle RestartGameTimerHandle;
 };

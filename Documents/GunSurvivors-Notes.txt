@@ -985,3 +985,16 @@ NOTE: GetAllActorsOfClass() fills out the array with AActor pointers
 
 
 ========================================================================
+57. Restart Game
+
+Timer:
+GetWorldTimerManager().SetTimer(RestartGameTimerHandle, this, &ThisClass::OnRestartGameTimerTimeout, 1.0f, false, TimeBeforeRestart);
+
+Reload the level:
+UGameplayStatics::OpenLevel(GetWorld(), FName("MainLevel"));
+
+can also do:
+UGameplayStatics::OpenLevel(GetWorld(), FName(*GetWorld()->GetMapName()));
+
+========================================================================
+

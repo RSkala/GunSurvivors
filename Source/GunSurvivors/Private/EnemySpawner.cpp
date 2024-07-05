@@ -138,6 +138,7 @@ void AEnemySpawner::OnPlayerDied()
 	// Player has died. Stop spawning.
 	StopSpawning();
 
+	// Disable all enemies
 	TArray<AActor*> EnemyActorArray;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), EnemyActorArray);
 	for (AActor* EnemyActor : EnemyActorArray)
@@ -148,6 +149,8 @@ void AEnemySpawner::OnPlayerDied()
 		}
 	}
 
-	// TODO: Restart Game
+	// Restart the game
+	check(GunSurvivorsGameMode != nullptr);
+	GunSurvivorsGameMode->RestartGame();
 }
 
