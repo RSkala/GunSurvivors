@@ -57,6 +57,34 @@ void ATestActor::BeginPlay()
 #if WITH_EDITOR
 bool ATestActor::CanEditChange(const FProperty* InProperty) const
 {
+	FString PropertyNameString = InProperty != nullptr ? InProperty->GetName() : "(invalid)";
+	UE_LOG(LogTestActor, Log, TEXT("ATestActor::CanEditChange - Property: %s"), *PropertyNameString);
+
+	// Get the name of the property being edited
+	const FName InPropertyName = InProperty != nullptr ? InProperty->GetFName() : NAME_None;
+
+	// Boolean test
+	const FName IntegerPropertyName = GET_MEMBER_NAME_CHECKED(ATestActor, IntegerProperty);
+	if (InPropertyName == IntegerPropertyName)
+	{
+		return BooleanToggle;
+	}
+
+	// Array test
+	const FName IntegerProperty2Name = GET_MEMBER_NAME_CHECKED(ATestActor, IntegerProperty2);
+	if (InPropertyName == IntegerProperty2Name)
+	{
+		// Example -- If sum of array > 10, then we can edit the property
+		int32 Sum = 0;
+		for (const int32& CurrentValue : EditConditionArray)
+		{
+			Sum += CurrentValue;
+		}
+		return Sum > 10;
+	}
+
+	// Edit Conditions for other Properties
+
 	return Super::CanEditChange(InProperty);
 }
 #endif // WITH_EDITOR

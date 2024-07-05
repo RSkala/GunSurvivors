@@ -119,4 +119,24 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TestActor|Property Conditions|Value Gated", meta = (EditCondition = "ValuePropertyGate > 15"))
 	int32 ValueGatedInt;
+
+	// -------------------------------------------------------
+	// --- Testing Property Conditions using CanEditChange ---
+	// -------------------------------------------------------
+
+	// --- Condition with boolean ---
+
+	UPROPERTY(EditAnywhere, Category = "TestActor|Property Conditions|Can Edit Change")
+	bool BooleanToggle;
+
+	UPROPERTY(EditAnywhere, Category = "TestActor|Property Conditions|Can Edit Change")
+	int32 IntegerProperty;
+
+	// --- Condition with array ---
+
+	UPROPERTY(EditAnywhere, Category = "TestActor|Property Conditions|Can Edit Change")
+	TArray<int32> EditConditionArray;
+
+	UPROPERTY(EditAnywhere, Category = "TestActor|Property Conditions|Can Edit Change")
+	int32 IntegerProperty2;
 };
