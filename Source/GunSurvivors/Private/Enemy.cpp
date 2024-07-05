@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
+#include "Sound/SoundBase.h"
 
 #include "TopDownCharacter.h"
 
@@ -83,6 +84,9 @@ void AEnemy::Die()
 	// Set the "dead" flipbook
 	check(FlipbookComp != nullptr);
 	FlipbookComp->SetFlipbook(DeadFlipbookAsset);
+
+	// Play Death Sound
+	UGameplayStatics::PlaySound2D(GetWorld(), DieSound);
 
 	// Change the sorting (so it is one layer behind what it was when alive)
 	FlipbookComp->SetTranslucentSortPriority(-5);

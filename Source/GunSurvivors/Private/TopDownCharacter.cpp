@@ -11,8 +11,10 @@
 #include "InputActionValue.h"
 #include "GameFramework/Controller.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSpriteComponent.h"
+#include "Sound/SoundBase.h"
 
 #include "Bullet.h"
 #include "Enemy.h"
@@ -234,6 +236,9 @@ void ATopDownCharacter::Shoot(const FInputActionValue& InputActionValue)
 		const float BulletSpeed = 300.0f;
 		SpawnedBullet->Launch(BulletDirection, BulletSpeed);
 
+		// Play the shoot sound
+		UGameplayStatics::PlaySound2D(GetWorld(), BulletShootSound);
+
 		// Start the timer that allows the player to shoot again
 		GetWorldTimerManager().SetTimer(ShootCooldownTimerHandle, this, &ThisClass::OnShootCooldownTimerTimeout, 1.0f, false, ShootCooldownDurationSeconds);
 	}
@@ -289,6 +294,8 @@ void ATopDownCharacter::OverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 				bIsAlive = false;
 				bCanMove = false;
 				bCanShoot = false;
+
+				UGameplayStatics::PlaySound2D(GetWorld(), DieSound);
 
 				PlayerDiedDelegate.Broadcast();
 			}

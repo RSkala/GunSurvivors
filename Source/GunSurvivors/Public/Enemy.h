@@ -65,5 +65,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StopDistance = 20.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class USoundBase> DieSound;
+
+	// Timer handle for destroying this enemy from the scene after death
 	struct FTimerHandle DestroyTimerHandle;
 };

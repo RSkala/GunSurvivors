@@ -997,4 +997,26 @@ can also do:
 UGameplayStatics::OpenLevel(GetWorld(), FName(*GetWorld()->GetMapName()));
 
 ========================================================================
+58. Final Touches
+
+Sound Effects:
+
+Declaration:
+	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Shooting")
+	TObjectPtr<class USoundBase> BulletShootSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Life+Death")
+	TObjectPtr<class USoundBase> DieSound;
+
+
+Playing Sounds:
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
+...
+UGameplayStatics::PlaySound2D(GetWorld(), BulletShootSound);
+UGameplayStatics::PlaySound2D(GetWorld(), DieSound);
+
+Asign these in editor CDO
+
+========================================================================
 

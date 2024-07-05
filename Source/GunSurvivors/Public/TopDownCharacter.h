@@ -117,9 +117,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Shooting")
 	TSubclassOf<class ABullet> BulletActorToSpawn;
 
+	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Shooting")
+	TObjectPtr<class USoundBase> BulletShootSound;
+
 	// --- Life/Death ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TopDownCharacter|Life+Death")
 	bool bIsAlive = true;
+
+	UPROPERTY(EditDefaultsOnly, Category = "TopDownCharacter|Life+Death")
+	TObjectPtr<class USoundBase> DieSound;
 
 	// --- Timers ---
 	struct FTimerHandle ShootCooldownTimerHandle;
