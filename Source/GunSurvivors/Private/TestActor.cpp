@@ -54,3 +54,10 @@ void ATestActor::BeginPlay()
 	Super::BeginPlay();
 }
 
+#if WITH_EDITOR
+bool ATestActor::CanEditChange(const FProperty* InProperty) const
+{
+	return Super::CanEditChange(InProperty);
+}
+#endif // WITH_EDITOR
+
