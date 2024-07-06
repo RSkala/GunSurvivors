@@ -100,6 +100,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TestActor|Various Tests")
 	float TestFloatValue = 12345.0f;
 
+	// Widget
+	UPROPERTY(EditAnywhere, Category = "TestActor|Various Tests", meta = (MakeEditWidget))
+	FVector SomePosition;
+
 	// ----------------------
 	// --- Testing Clamps --- 
 	// ----------------------
