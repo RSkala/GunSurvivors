@@ -6,6 +6,46 @@
 #include "GameFramework/Actor.h"
 #include "TestActor.generated.h"
 
+// ----------------------------------------------------------------------------------------------------------------
+
+// --- Enums ---
+
+// You MUST have the BlueprintType specifier in order to use enums in Blueprints
+// UENUMs need to be uint8, otherwise will they used end up in the global namespace (source???)
+// Since UE 5.4, this is now a compile error (if you don't have the uint8 after the declaration)
+// There are multiple range specifiers: https://benui.ca/unreal/iterate-over-enum-tenumrange/
+UENUM(BlueprintType) 
+enum class ETestEnum : uint8
+{
+	EnumVal1 UMETA(DisplayName = "Enum Value One!"),
+	EnumVal2 UMETA(DisplayName = "val 2"),
+	EnumVal3,
+	EnumVal4,
+	Count UMETA(Hidden) // This cannot be seen or selected in the Blueprint!
+};
+ENUM_RANGE_BY_COUNT(ETestEnum, ETestEnum::Count); // This is REQUIRED in order to iterate over it in C++ (i.e. TEnumRange)
+//ENUM_RANGE_BY_FIRST_AND_LAST(ETestEnum, ETestEnum::EnumVal1, ETestEnum::EnumVal4); => Use this if you don't want a "Count" value
+//ENUM_RANGE_BY_VALUES(...) => Use this if you have a non-contiguous range of values
+
+UENUM()
+enum class ETestEnum2 // This class cannot be used with Blueprints (
+{
+	Val1, Val2, Val3
+};
+
+// Bitflags / Bitmask test
+UENUM(meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
+enum class ETestFlags
+{
+	CanFly = 1 << 0,
+	CanSwim = 1 << 1,
+	CanLayEggs = 1 << 2,
+	CanPoop = 1 << 3
+};
+ENUM_CLASS_FLAGS(ETestFlags);
+
+// ----------------------------------------------------------------------------------------------------------------
+
 // Class just used for testing various things
 UCLASS()
 class GUNSURVIVORS_API ATestActor : public AActor
@@ -139,4 +179,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "TestActor|Property Conditions|Can Edit Change")
 	int32 IntegerProperty2;
+
+	// ---------------------
+	// --- Testing Enums ---
+	// ---------------------
+	UPROPERTY(EditAnywhere, Category = "TestActor|Enums")
+	ETestEnum TestEnum;
+
+	UPROPERTY(EditAnywhere, Category = "TestActor|Enums", meta = (Bitmask, BitmaskEnum = ETestFlags))
+	int32 TestFlags;
 };

@@ -51,6 +51,12 @@ void ATestActor::BeginPlay()
 {
 	UE_LOG(LogTestActor, Log, TEXT("ATestActor::BeginPlay - %s"), *GetName());
 
+	// Test Iterating over Enums
+	for (ETestEnum TestEnumValue : TEnumRange<ETestEnum>()) // In order to use TEnumRange
+	{
+		UE_LOG(LogTestActor, Log, TEXT("TestEnumValue: %d"), TestEnumValue);
+	}
+
 	Super::BeginPlay();
 }
 
